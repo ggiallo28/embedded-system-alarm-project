@@ -29,7 +29,7 @@ src/Buzzer.o: ../src/Buzzer.c ../include/Buzzer.h \
  ../include/main.h ../system/include/diag/Trace.h ../include/Timer.h \
  ../system/include/CMSIS/cmsis_device.h \
  ../system/include/CMSIS/stm32f30x.h ../include/Buzzer.h \
- ../include/KeyPad.h ../include/HD44780_F3.h ../include/stm32f30x_conf.h
+ ../include/KeyPad.h ../include/LCD.h ../include/stm32f30x_conf.h
 
 ../include/Buzzer.h:
 
@@ -107,6 +107,6 @@ src/Buzzer.o: ../src/Buzzer.c ../include/Buzzer.h \
 
 ../include/KeyPad.h:
 
-../include/HD44780_F3.h:
+../include/LCD.h:
 
 ../include/stm32f30x_conf.h:

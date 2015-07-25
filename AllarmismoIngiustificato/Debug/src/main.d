@@ -29,7 +29,7 @@ src/main.o: ../src/main.c ../include/main.h \
  ../system/include/stm32f3-stdperiph/stm32f30x_usart.h \
  ../system/include/stm32f3-stdperiph/stm32f30x_wwdg.h \
  ../system/include/stm32f3-stdperiph/stm32f30x_misc.h ../include/Buzzer.h \
- ../include/Sens.h ../include/KeyPad.h ../include/HD44780_F3.h \
+ ../include/Sens.h ../include/KeyPad.h ../include/LCD.h \
  ../include/stm32f30x_conf.h
 
 ../include/main.h:
@@ -106,6 +106,6 @@ src/main.o: ../src/main.c ../include/main.h \
 
 ../include/KeyPad.h:
 
-../include/HD44780_F3.h:
+../include/LCD.h:
 
 ../include/stm32f30x_conf.h:
