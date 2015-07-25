@@ -24,12 +24,6 @@
 #define MOVE4 								(5)
 #define KEYPAD 								(6)
 
-typedef struct {
-	bool eventsArray[NUMBER_OF_SENSE+1];
-	bool isActive;
-}AlarmStruct;
-
-
 // ----- main() ---------------------------------------------------------------
 
 // Sample pragmas to cope with warnings. Please note the related line at

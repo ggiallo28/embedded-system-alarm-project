@@ -81,7 +81,7 @@ main(int argc, char* argv[])
 	}
  /********* Generate Outputs ********/
 		 if(state.eventsArray[MAGN1] && state.isActive){
-			 alarm_on();
+			 state.isRinging = true;
 			 HD44780_ClrScr();
 			 HD44780_GotoXY(0,0);
 			 HD44780_PutStr("EVENTO");
@@ -89,7 +89,7 @@ main(int argc, char* argv[])
 			 HD44780_PutStr("PORTA 1");
 		 }
 		 if(state.eventsArray[MAGN2] && state.isActive){
-			 alarm_on();
+			 state.isRinging = true;
 			 HD44780_ClrScr();
 			 HD44780_GotoXY(0,0);
 			 HD44780_PutStr("EVENTO");
@@ -97,7 +97,7 @@ main(int argc, char* argv[])
 			 HD44780_PutStr("PORTA 2");
 		 }
 		 if(state.eventsArray[MOVE1] && state.isActive){
-			 alarm_on();
+			 state.isRinging = true;
 			 HD44780_ClrScr();
 			 HD44780_GotoXY(0,0);
 			 HD44780_PutStr("EVENTO");
@@ -105,7 +105,7 @@ main(int argc, char* argv[])
 			 HD44780_PutStr("STANZA 1");
 		 }
 		 if(state.eventsArray[MOVE2] && state.isActive){
-			 alarm_on();
+			 state.isRinging = true;
 			 HD44780_ClrScr();
 			 HD44780_GotoXY(0,0);
 			 HD44780_PutStr("EVENTO");
@@ -113,7 +113,7 @@ main(int argc, char* argv[])
 			 HD44780_PutStr("STANZA 2");
 		 }
 		 if(state.eventsArray[MOVE3] && state.isActive){
-			 alarm_on();
+			 state.isRinging = true;
 			 HD44780_ClrScr();
 			 HD44780_GotoXY(0,0);
 			 HD44780_PutStr("EVENTO");
@@ -121,16 +121,20 @@ main(int argc, char* argv[])
 			 HD44780_PutStr("STANZA 3");
 		 }
 		 if(state.eventsArray[MOVE4] && state.isActive){
-			 alarm_on();
+			 state.isRinging = true;
 			 HD44780_ClrScr();
 			 HD44780_GotoXY(0,0);
 			 HD44780_PutStr("EVENTO");
 			 HD44780_GotoXY(0,1);
 			 HD44780_PutStr("STANZA 4");
 		 }
+
 		 if(!state.isActive){
-			 alarm_off();
+			 alarm_off(&state);
+			 state.isRinging = false;
 		 }
+		 if(state.isRinging)
+			 alarm_on(&state);
 	 }
 }
 
@@ -142,6 +146,7 @@ alarm_init(AlarmStruct *state, char *defaultCode){
 	}
 	state -> isActive = false;
 	DEFAULT_CODE(defaultCode);
+	state->pwm_freq = BUZZER_MIN_FREQ;
 }
 
 // ----------------------------------------------------------------------------
