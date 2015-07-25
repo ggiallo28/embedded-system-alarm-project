@@ -134,7 +134,7 @@ Special Note(s) : NONE
 #define TIMER_CHANNEL1_PRELOAD_CONFIG TIM_OC1PreloadConfig
 #define TIMER_CHANNEL3_PRELOAD_CONFIG TIM_OC3PreloadConfig
 #define TIMER_CHANNEL4_PRELOAD_CONFIG TIM_OC4PreloadConfig
-#define TIMER_CHANNEL_SET_COMPARE TIM_SetCompare2
+#define TIMER_CHANNEL_SET_COMPARE  TIM_SetCompare2
 #define TIMER_CHANNEL2_SET_COMPARE TIM_SetCompare1
 #define TIMER_CHANNEL3_SET_COMPARE TIM_SetCompare3
 #define TIMER_CHANNEL4_SET_COMPARE TIM_SetCompare4
@@ -145,11 +145,6 @@ Special Note(s) : NONE
 
 #define TIMER_CLOCK_FREQUENCY 1000
 #define TIMER_PERIOD 75
-
-#define TIMER_PWM_INCREMENT (TIMER_PERIOD/4)
-
-#define LINEONE    {'B','E','N','V','E','N','U','T','O','\0','\0','\0','\0','\0','\0','\0'}
-#define LINETWO    {'W','E','L','C','O','M','E','\0','\0','\0','\0','\0','\0','\0','\0','\0'}
 /***************************************************************
  *
  * FUNCTIONS
@@ -179,9 +174,7 @@ Special Note(s) : NONE
 #define hd44780_ddram_addr( addr )                hd44780_wr_cmd( HD44780_CMD_DDRAM_ADDR | ( addr & 0x7F ) )
 #define hd44780_write_char( c )                   hd44780_wr_data( c & 0xff )
 
-void hd44780_Delay(unsigned long del);
 void hd44780_wr_hi_nibble(unsigned char data);
-void hd44780_wr_lo_nibble(unsigned char data);
 void hd44780_write(unsigned char data);
 void hd44780_wr_cmd(unsigned char cmd);
 void hd44780_wr_data(unsigned char data);

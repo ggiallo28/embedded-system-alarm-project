@@ -7,40 +7,36 @@
 #include "math.h"
 
 void keypad_init(KeyStruct* KeyPad) {
-	// Enable GPIO Peripheral clock
-	RCC_AHBPeriphClockCmd(KEYPAD_RCC_MASKx(KEYPAD_COL_PORT_NUMBER), ENABLE);
-	RCC_AHBPeriphClockCmd(KEYPAD_RCC_MASKx(KEYPAD_ROW_PORT_NUMBER), ENABLE);
-
-	GPIO_InitTypeDef GPIO_InitStructure_COLS; /* Creiamo le strutture dati per la configurazione */
-
-	/* Abilitiamo tutte le porte necessarie attraverso una OR bit a bit */
-	GPIO_InitStructure_COLS.GPIO_Pin = (   	KEYPAD_PIN_MASK(KEYPAD_PIN0_COLS)	|
+	RCC_AHBPeriphClockCmd(KEYPAD_RCC_MASKx(KEYPAD_COL_PORT_NUMBER), ENABLE);                        /* Di seguito e' riportata la funzione che abilita il bus, come ingresso   */
+	RCC_AHBPeriphClockCmd(KEYPAD_RCC_MASKx(KEYPAD_ROW_PORT_NUMBER), ENABLE);						/* è presente il numero di porta, enable oppure disable                    */
+	GPIO_InitTypeDef GPIO_InitStructure_COLS; 														/* Creiamo le strutture dati per la configurazione                         */
+	GPIO_InitStructure_COLS.GPIO_Pin = (   	KEYPAD_PIN_MASK(KEYPAD_PIN0_COLS)	|                   /* Abilitiamo tutte le porte necessarie attraverso una OR bit a bit        */
 											KEYPAD_PIN_MASK(KEYPAD_PIN1_COLS)	|
 											KEYPAD_PIN_MASK(KEYPAD_PIN2_COLS)	);
+	GPIO_InitStructure_COLS.GPIO_Mode = GPIO_Mode_IN;                                               /* Configuriamo il PIN in modalità Input                                   */
+	GPIO_InitStructure_COLS.GPIO_OType = GPIO_OType_PP;       /* I presenti settaggi sono    */
+	GPIO_InitStructure_COLS.GPIO_Speed = GPIO_Speed_50MHz;    /* necessari solo per l'output */
+	GPIO_InitStructure_COLS.GPIO_PuPd = GPIO_PuPd_DOWN;                                             /* con resistore di pull down.                                             */
+	GPIO_Init(KEYPAD_GPIOx(KEYPAD_COL_PORT_NUMBER), &GPIO_InitStructure_COLS);                      /* Inizzazione ottenuta passando alla funzione il numero di porta e di pin */
 
-	GPIO_InitStructure_COLS.GPIO_Mode = GPIO_Mode_IN;
-	GPIO_InitStructure_COLS.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure_COLS.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure_COLS.GPIO_PuPd = GPIO_PuPd_DOWN;
 
-	GPIO_Init(KEYPAD_GPIOx(KEYPAD_COL_PORT_NUMBER), &GPIO_InitStructure_COLS);
 
-	GPIO_InitTypeDef GPIO_InitStructure_ROWS; /* Creiamo le strutture dati per la configurazione */
-
-	/* Abilitiamo tutte le porte necessarie attraverso una OR bit a bit */
-	GPIO_InitStructure_ROWS.GPIO_Pin = (   	KEYPAD_PIN_MASK(KEYPAD_PIN3_ROWS)	|
+	GPIO_InitTypeDef GPIO_InitStructure_ROWS; 														/* Creiamo le strutture dati per la configurazione                         */
+	GPIO_InitStructure_ROWS.GPIO_Pin = (   	KEYPAD_PIN_MASK(KEYPAD_PIN3_ROWS)	|                   /* Abilitiamo tutte le porte necessarie attraverso una OR bit a bit        */
 											KEYPAD_PIN_MASK(KEYPAD_PIN4_ROWS)	|
 											KEYPAD_PIN_MASK(KEYPAD_PIN5_ROWS)	|
 											KEYPAD_PIN_MASK(KEYPAD_PIN6_ROWS)   );
 
-	GPIO_InitStructure_ROWS.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure_ROWS.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure_ROWS.GPIO_Mode = GPIO_Mode_OUT;                             					/* Configuriamo il PIN in modalità Output                                   */
+	GPIO_InitStructure_ROWS.GPIO_OType = GPIO_OType_PP;	                                            /* abilitando sia il transistore di pull UP che di pull Down                */
 	GPIO_InitStructure_ROWS.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure_ROWS.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_InitStructure_ROWS.GPIO_PuPd = GPIO_PuPd_NOPULL;											/* Essendo il PIN configurato in modalità OUTPUT non abilitiamo nessuno dei */
+ 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	/* resistori, ne pull UP ne pull DOWN                                       */
+	GPIO_Init(KEYPAD_GPIOx(KEYPAD_ROW_PORT_NUMBER), &GPIO_InitStructure_ROWS);						/* Inizzazione ottenuta passando alla funzione il numero di porta e di pin */
 
-	GPIO_Init(KEYPAD_GPIOx(KEYPAD_ROW_PORT_NUMBER), &GPIO_InitStructure_ROWS);
 
-	int i;
+
+	int i;																							/* Creazione del CHARSET */
 	int j;
 
 	KeyPad->index = (PIN_DIM-1);
@@ -66,25 +62,21 @@ void keypad_init(KeyStruct* KeyPad) {
 
 }
 
-/* LOGICA:
- * ABBIAMO CONFIGURATO LE RIGHE COME PIN DI >>USCITA<<, E LE COLONNE COME PIN DI >>INGRESSO<<
- * ALIMENTIAMO LE RIGHE UNA PER VOLTA, QUINDI SAPPIAMO QUALE RIGA E' ALIMENTATA IN UN CERTO ISTANTE.
+/* @Param: 			- KeyStruct* : 	struttura con la quale è gestito in maniera atomica lo stato del tastierino.
+ * @return:			- char* : 		puntatore al char premuto. Si è utilizzato un puntatore in modo da poter restituire
+ * 									NULL nel caso in cui non venga premuto nessun tasto.
  *
- * QUANDO SI PREME UN BOTTONE SI CHIUDE IL CIRCUITO TRA LA RIGA r E LA COLONNA c.
- * IL VALORE LOGICO ALTO IN USCITA DAL CONDUTTORE DI RIGA VIENE LETTO SOLO IN CORRISPONDENZA DELLA COLONNA IN CUI E' PRESENTE IL TASTO CHE ABBIAMO PREMUTO.
+ * Il tastierino è costituito da alcuni connettori di riga (4) e alcuni connettori di colonna (3), quando si preme un bottone
+ * si chiude il circuito tra la riga r e la colonna c.
  *
- * SIA ALIMENTATA LA RIGA r (NOTA) QUALE COLONNA c HA VALORE LOGICO ALTO?
- * QUINDI E' STATO PREMUTO IL TASTO (r,c) SUL TASTIERINO.
+ * Guardando alla configurazione precedente possiamo osservare che abbiamo configurato le righe come PIN di uscita mentre le
+ * colonne sono state configurate come PIN di ingresso. Nella presente funzione abilitiamo una per volta le righe ponendo su
+ * di essa un valore logico alto e su tutte le altre un valore logico basso. Sia r la riga alimentata in un certo istante se
+ * i valori logici letti sui collegamenti di colonna sono tutti bassi allora non e' stato premuto nessun bottone sulla
+ * presente riga r abilitata, altrimenti sia c l'indice di colonna che presenta un livello logico alto ciò significa che è
+ * stato premuto il tasto in posizione (r,c).
  *
- * I PIN SONO ORDINATI DA 0 A 2.
- * QUANDO SI PREME 1 SULLA COLONNA VIENE LETTO 0001 = 1
- * PER 4 0010 = 2
- * PER 7 0100 = 4
- * PER * 1000 = 8
- * POSSIAMO OTTENERE L'INDICE DI COLONNA SEMPLICEMENTE FACENDO IL LOGARITMO DEL VALORE LETTO.
- *
- * IN MANIERA PIU' EFFICIENTE SI POTEVA ITERARE SULLE COLONNE VISTO CHE SONO DI MENO.
- * MA ORA HO SONNO.
+ * I PIN SONO ORDINATI DA 0 A 2. POSSIAMO OTTENERE L'INDICE DI COLONNA SEMPLICEMENTE FACENDO IL LOGARITMO DEL VALORE LETTO.
  *
  */
 
@@ -103,10 +95,10 @@ char* keypad_read(KeyStruct* KeyPad) {
 			GPIO_ResetBits(KEYPAD_GPIOx(KEYPAD_ROW_PORT_NUMBER),KEYPAD_PIN_MASK(row_pin_number));
 			currChar = KeyPad->keys[row_pin_number][col];
 
-			if(currChar != KeyPad->prevChar || KeyPad->counter>NO_INPUT_TIME){
-				KeyPad->prevChar = currChar;
-				KeyPad->counter = 0;
-				return &(KeyPad->prevChar);
+			if(currChar != KeyPad->prevChar || KeyPad->counter>NO_INPUT_TIME){              /* Logica necessaria affinche' non venga riprodotto in uscita più volte lo stesso valore         */
+				KeyPad->prevChar = currChar;												/* nel caso in cui il tasto venga premuto a lungo. Per non escludere la possibilità di           */
+				KeyPad->counter = 0;														/* poter inserire valori consecutivamente uguali all'interno del PIN è presente anche un counter */
+				return &(KeyPad->prevChar);													/* che controlla quanto tempo è trascorso dall'ultima pressione                                  */
 			}
 
 			KeyPad->counter = 0;
@@ -120,6 +112,9 @@ char* keypad_read(KeyStruct* KeyPad) {
 	return NULL;
 }
 
+/*@Param: 			- KeyStruct* : 	struttura con la quale è gestito in maniera atomica lo stato del tastierino.
+ *@return:			- bool* : 		restituisce true se è stata apportata una modifica al PIN memorizzato all'interno della struttura.
+ */
 bool get_code(KeyStruct* KeyPad){
 	char* character = keypad_read(KeyPad);
 	if(*character == CLEAR_CHAR){
@@ -136,7 +131,11 @@ bool get_code(KeyStruct* KeyPad){
 	return true;
 }
 
-/* Funzione che re-inizializza l'array PIN e l'INDEX all'interno della struttura */
+/*@Param: 			- KeyStruct* : 	struttura con la quale è gestito in maniera atomica lo stato del tastierino.
+ *@return:			- void
+ *
+ * Funzione utilizzata per inizializzare la struttura KeyPad.
+ */
 void keypad_flush(KeyStruct* KeyPad){
 	int i;
 	for(i =0; i<PIN_DIM; i++)
