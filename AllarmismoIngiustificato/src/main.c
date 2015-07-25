@@ -39,7 +39,7 @@ main(int argc, char* argv[])
 		 state.eventsArray[MOVE4] = move_four_read(&sense);
 		 state.eventsArray[KEYPAD] = get_code(&keyPadState);
 
-/********* Update State ************/
+/******** Update State ***********/
 		isEquals = true;
 
 		if(state.eventsArray[KEYPAD]){
@@ -79,7 +79,7 @@ main(int argc, char* argv[])
 			keypad_flush(&keyPadState);
 		}
 	}
- /********* Generate Outputs ********/
+ /******** Generate Outputs *******/
 		 if(state.eventsArray[MAGN1] && state.isActive){
 			 state.isRinging = true;
 			 HD44780_ClrScr();
@@ -133,6 +133,7 @@ main(int argc, char* argv[])
 			 alarm_off(&state);
 			 state.isRinging = false;
 		 }
+
 		 if(state.isRinging)
 			 alarm_on(&state);
 	 }
@@ -146,7 +147,10 @@ alarm_init(AlarmStruct *state, char *defaultCode){
 	}
 	state -> isActive = false;
 	DEFAULT_CODE(defaultCode);
-	state->pwm_freq = BUZZER_MIN_FREQ;
+	state->pwm_freq[0] = FREQ1;
+	state->pwm_freq[1] = FREQ2;
+	state->time =0;
+	state->index
 }
 
 // ----------------------------------------------------------------------------

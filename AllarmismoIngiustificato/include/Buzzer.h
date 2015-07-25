@@ -26,18 +26,20 @@
 
 #define BUZZER_TIMER_CLOCK_FREQUENCY 			(720000)
 #define BUZZER_DUTY_CYCLE 						(0.5)
-#define BUZZER_MAX_FREQ       					(16000)
-#define BUZZER_MIN_FREQ       					(100)
-#define LOWUP									(1)
-#define UPLOW									(-1)
+#define BUZZER_MAX_FREQ       					(1000)
+#define BUZZER_MIN_FREQ       					(500)
+#define FREQ1									(1000)
+#define FREQ2									(4000)
+#define MAX_TIME								(300)
 
-#define BUZZER_x100INCREMENT					(2)
 // ----------------------------------------------------------------------------
 typedef struct {
 	bool eventsArray[NUMBER_OF_SENSE+1];
 	bool isActive;
 	bool isRinging;
-	int pwm_freq;
+	int pwm_freq[2];
+	int time;
+	int index;
 }AlarmStruct;
 
 
@@ -49,22 +51,22 @@ inline void alarm_off(AlarmStruct *);
 inline void
 __attribute__((always_inline))
 alarm_on(AlarmStruct * state){
-	int increment = (state->pwm_freq/100)*BUZZER_x100INCREMENT;
-	int direction = LOWUP;
+	state->time++;
+	state->time = state->time%MAX_TIME;
+	if(state->time==MAX_TIME/2){
+		state->index = 1;
+	}
+	if(state->time<=0){
+		state->index = 0;
+	}
 
-	if(state->pwm_freq>BUZZER_MAX_FREQ)
-		direction = UPLOW;
-	if(state->pwm_freq<BUZZER_MIN_FREQ)
-		direction = LOWUP;
-
-	state->pwm_freq+=(increment*direction);
 
 	RCC_ClocksTypeDef RCC_Clocks;
 	RCC_GetClocksFreq(&RCC_Clocks);
 
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	uint32_t prescaler = RCC_Clocks.PCLK2_Frequency / BUZZER_TIMER_CLOCK_FREQUENCY - 1;
-	uint32_t period = BUZZER_TIMER_CLOCK_FREQUENCY / state->pwm_freq;
+	uint32_t period = BUZZER_TIMER_CLOCK_FREQUENCY / state->pwm_freq[state->index];
 	TIM_TimeBaseStructure.TIM_Period = period - 1;
 	TIM_TimeBaseStructure.TIM_Prescaler = prescaler;
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
@@ -79,7 +81,6 @@ inline void
 __attribute__((always_inline))
 alarm_off(AlarmStruct * state) {
 	BUZZER_TIMER_CHANNEL_SET_COMPARE(BUZZER_TIMER, 0);
-	state->pwm_freq = BUZZER_MIN_FREQ;
 }
 
 #endif
