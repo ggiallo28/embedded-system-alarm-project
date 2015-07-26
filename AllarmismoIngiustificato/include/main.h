@@ -13,8 +13,6 @@
 
 #define CYCLE_DURATION 						(1)
 #define DEFAULT_CODE(_CharArray)			{int i; for(i=0; i<PIN_DIM; i++){_CharArray[i]=(i+49);} _CharArray[PIN_DIM]='\0';}
-#define LINE1 								(0)
-#define LINE2 								(1)
 
 #define MAGN1 								(0)
 #define MAGN2 								(1)
@@ -35,13 +33,12 @@ typedef struct {
 }AlarmStruct;
 
 void
-alarm_init(AlarmStruct *state, char *defaultCode){
+alarm_init(AlarmStruct *state){
 	int i;
 	for(i=0; i<NUMBER_OF_SENSE+1; i++){
 		state -> eventsArray[i]=false;
 	}
 	state -> isActive = false;
-	DEFAULT_CODE(defaultCode);
 }
 
 #pragma GCC diagnostic push

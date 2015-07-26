@@ -41,7 +41,6 @@ int edge_read(EdgeStruct *s, int pin){
 		s->prevStates[pin]=lecture;
 		return 0;
 	}
-
 }
 
 void

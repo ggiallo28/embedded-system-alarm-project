@@ -10,17 +10,17 @@ main(int argc, char* argv[])
 	KeyStruct keyPadState;
 	AlarmStruct state;
 	EdgeStruct sense;
-	char defaultCode[PIN_DIM+1];
+	char code[PIN_DIM+1];
+	DEFAULT_CODE(code);
 	bool isEquals;
 
 /************* INIT ***************/
 	keypad_init(&keyPadState);
 	timer_start();
 	sense_init(&sense);
-	alarm_init(&state,defaultCode);
+	alarm_init(&state);
 	lcd_init();
 	buzzer_init();
-
 
 /************** INFINITE LOOP *****/
 	HD44780_ClrScr();
@@ -29,20 +29,8 @@ main(int argc, char* argv[])
 	HD44780_GotoXY(0,1);
 	HD44780_PutStr("FOGGIA");
 	keypad_flush(&keyPadState);
-	int i=0;
 
-	 while(1)/*{
-		 alarm_on();
-		 timer_sleep(1);
-		 i++;
-		 if(i==3000){
-			 alarm_off();
-			 timer_sleep(3000);
-			 i=0;
-		 }
-	 }
-
-	 if(false) */{
+	 while(1){
 		 state.eventsArray[MAGN1] = magn_one_read(&sense);
 		 state.eventsArray[MAGN2] = magn_two_read(&sense);
 		 state.eventsArray[MOVE1] = move_one_read(&sense);
@@ -60,9 +48,10 @@ main(int argc, char* argv[])
 		HD44780_GotoXY(0,0);
 		HD44780_PutStr("PIN:");
 		HD44780_GotoXY(0,1);
-		while(keyPadState.pin[i] != '\0' && defaultCode[i] != '\0'){
+
+		while(keyPadState.pin[i] != '\0' && code[i] != '\0'){
 			HD44780_PutChar(keyPadState.pin[i]);
-			(isEquals & (keyPadState.pin[i] == defaultCode[i])) ? (isEquals = true) : (isEquals = false);
+			(isEquals & (keyPadState.pin[i] == code[i])) ? (isEquals = true) : (isEquals = false);
 			i++;
 		}
 
@@ -140,8 +129,6 @@ main(int argc, char* argv[])
 			 HD44780_GotoXY(0,1);
 			 HD44780_PutStr("STANZA 4");
 		 }
-
-
 
 		 if(!state.isActive){
 			 alarm_off();
