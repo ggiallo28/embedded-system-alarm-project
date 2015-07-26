@@ -67,6 +67,35 @@ void buzzer_init() {
 	TIM_Cmd(BUZZER_TIMER, ENABLE);
 }
 
+void
+alarm_on(){
+	static int index =0;
+	static int time =0;
+	int pwm_freq;
+
+
+	if((time = (time+1)%MAX_TIME)  == 0)
+		index = (index+1)%2;
+
+	pwm_freq = (index+1)*FREQUENCY;
+
+
+	RCC_ClocksTypeDef RCC_Clocks;
+	RCC_GetClocksFreq(&RCC_Clocks);
+
+	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+	uint32_t prescaler = RCC_Clocks.PCLK2_Frequency / BUZZER_TIMER_CLOCK_FREQUENCY - 1;
+	uint32_t period = BUZZER_TIMER_CLOCK_FREQUENCY / pwm_freq;
+	TIM_TimeBaseStructure.TIM_Period = period - 1;
+	TIM_TimeBaseStructure.TIM_Prescaler = prescaler;
+	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+	TIM_TimeBaseInit(BUZZER_TIMER, &TIM_TimeBaseStructure);
+
+	BUZZER_TIMER_CHANNEL_SET_COMPARE(BUZZER_TIMER, period * BUZZER_DUTY_CYCLE);
+}
+
 // ----------------------------------------------------------------------------
 
 

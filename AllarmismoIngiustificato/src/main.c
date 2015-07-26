@@ -29,8 +29,20 @@ main(int argc, char* argv[])
 	HD44780_GotoXY(0,1);
 	HD44780_PutStr("FOGGIA");
 	keypad_flush(&keyPadState);
+	int i=0;
 
-	 while(1){
+	 while(1)/*{
+		 alarm_on();
+		 timer_sleep(1);
+		 i++;
+		 if(i==3000){
+			 alarm_off();
+			 timer_sleep(3000);
+			 i=0;
+		 }
+	 }
+
+	 if(false) */{
 		 state.eventsArray[MAGN1] = magn_one_read(&sense);
 		 state.eventsArray[MAGN2] = magn_two_read(&sense);
 		 state.eventsArray[MOVE1] = move_one_read(&sense);
@@ -129,28 +141,16 @@ main(int argc, char* argv[])
 			 HD44780_PutStr("STANZA 4");
 		 }
 
+
+
 		 if(!state.isActive){
-			 alarm_off(&state);
+			 alarm_off();
 			 state.isRinging = false;
 		 }
 
 		 if(state.isRinging)
-			 alarm_on(&state);
+			 alarm_on();
 	 }
-}
-
-void
-alarm_init(AlarmStruct *state, char *defaultCode){
-	int i;
-	for(i=0; i<NUMBER_OF_SENSE+1; i++){
-		state -> eventsArray[i]=false;
-	}
-	state -> isActive = false;
-	DEFAULT_CODE(defaultCode);
-	state->pwm_freq[0] = FREQ1;
-	state->pwm_freq[1] = FREQ2;
-	state->time =0;
-	state->index
 }
 
 // ----------------------------------------------------------------------------

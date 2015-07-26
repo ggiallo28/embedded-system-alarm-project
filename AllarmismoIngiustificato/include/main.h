@@ -28,9 +28,21 @@
 
 // Sample pragmas to cope with warnings. Please note the related line at
 // the end of this function, used to pop the compiler diagnostics status.
+typedef struct {
+	bool eventsArray[NUMBER_OF_SENSE+1];
+	bool isActive;
+	bool isRinging;
+}AlarmStruct;
 
 void
-alarm_init(AlarmStruct *state, char *defaultCode);
+alarm_init(AlarmStruct *state, char *defaultCode){
+	int i;
+	for(i=0; i<NUMBER_OF_SENSE+1; i++){
+		state -> eventsArray[i]=false;
+	}
+	state -> isActive = false;
+	DEFAULT_CODE(defaultCode);
+}
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
