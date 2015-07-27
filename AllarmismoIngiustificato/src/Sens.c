@@ -76,8 +76,7 @@ move_init()
 // ----------------------------------------------------------------------------
 int sense_read(int pin_number){
 	unsigned data = GPIO_ReadInputData((SENSE_GPIOx(SENSE_PORT_NUMBER)));
-	int toReturn = ((data & SENSE_PIN_MASK(pin_number)) != 0);
-	return toReturn;
+	return ((data & SENSE_PIN_MASK(pin_number)) != 0);
 }
 
 

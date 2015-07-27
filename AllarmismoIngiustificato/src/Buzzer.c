@@ -66,7 +66,11 @@ void buzzer_init() {
 	///////////// FINE SET CANALE /////////////////
 	TIM_Cmd(BUZZER_TIMER, ENABLE);
 }
-
+/*********************************************************************************************
+ *@Param:		- void
+ *@return:      - void
+ *Descrizione	: Suona il buzzer a due frequenze differenti per simulare un'allarme.
+ *********************************************************************************************/
 void
 alarm_on(){
 	static int index =0;

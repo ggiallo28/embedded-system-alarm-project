@@ -41,6 +41,12 @@ alarm_init(AlarmStruct *state){
 	state -> isActive = false;
 }
 
+/*********************************************************************************************
+ *@Param:		- char: puntatore array del codice
+ *@Param:		- KeyStruct: Struttura dati mantenete lo stato del KeyPad
+ *@return:      - void
+ *Descrizione	: Consente di modificare il codice di default.
+ *********************************************************************************************/
 void change_pin(char code[], KeyStruct * keyPadState){
 	pin_sound();
 	bool isEquals = true;

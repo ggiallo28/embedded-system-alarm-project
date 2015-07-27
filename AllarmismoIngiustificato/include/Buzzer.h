@@ -39,12 +39,22 @@ inline void pin_sound(void);
 
 // ---------------------------------------------------------------------------
 
+/*********************************************************************************************
+ *@Param:		- void
+ *@return:      - void
+ *Descrizione	: Disattiva l'allarme.
+ *********************************************************************************************/
 inline void
 __attribute__((always_inline))
 alarm_off() {
 	BUZZER_TIMER_CHANNEL_SET_COMPARE(BUZZER_TIMER, 0);
 }
 
+/*********************************************************************************************
+ *@Param:		- void
+ *@return:      - void
+ *Descrizione	: Suona il buzzer alla pressione di un tasto.
+ *********************************************************************************************/
 inline void
 __attribute__((always_inline))
 pin_sound() {

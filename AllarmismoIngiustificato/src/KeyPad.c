@@ -115,9 +115,12 @@ char* keypad_read(KeyStruct* KeyPad) {
 	return NULL;
 }
 
+/*********************************************************************************************
 /*@Param: 			- KeyStruct* : 	struttura con la quale è gestito in maniera atomica lo stato del tastierino.
- *@return:			- bool* : 		restituisce true se è stata apportata una modifica al PIN memorizzato all'interno della struttura.
- */
+ *@return:			- bool : 		restituisce true se è stata apportata una modifica al PIN memorizzato all'interno della struttura.
+ *Descrizione:		- Aggiorna il codice dell'allarme.
+ *********************************************************************************************/
+
 bool get_code(KeyStruct* KeyPad){
 	char* character = keypad_read(KeyPad);
 	if(*character == CLEAR_CHAR){
@@ -134,11 +137,13 @@ bool get_code(KeyStruct* KeyPad){
 	return true;
 }
 
+/*********************************************************************************************
 /*@Param: 			- KeyStruct* : 	struttura con la quale è gestito in maniera atomica lo stato del tastierino.
  *@return:			- void
  *
- * Funzione utilizzata per inizializzare la struttura KeyPad.
- */
+ *Descrizione: Funzione utilizzata per inizializzare la struttura KeyPad.
+ *********************************************************************************************/
+
 void keypad_flush(KeyStruct* KeyPad){
 	int i;
 	for(i =0; i<CODE_DIM; i++)
