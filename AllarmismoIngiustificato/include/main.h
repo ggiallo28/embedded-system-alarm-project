@@ -36,9 +36,8 @@ typedef struct {
 void
 alarm_init(AlarmStruct *state){
 	int i;
-	for(i=0; i<NUMBER_OF_SENSE+1; i++){
+	for(i=0; i<NUMBER_OF_SENSE+1; i++)
 		state -> eventsArray[i]=false;
-	}
 	state -> isActive = false;
 }
 
@@ -78,6 +77,7 @@ void change_pin(char code[], KeyStruct * keyPadState){
 
 	if(!isEquals){
 		HD44780_PutStr("ERRATO");
+		keyPadState->prevChar = '\0';
 		return;
 	}
 	bool confirm = false;

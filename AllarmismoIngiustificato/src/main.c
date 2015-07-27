@@ -144,7 +144,6 @@ main(int argc, char* argv[])
 		if(keyPadState.prevChar == ENTER_CHAR)
 			change_pin(code, &keyPadState);
 
-
 		timer_sleep(1);
 	}
 }
