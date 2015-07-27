@@ -41,6 +41,7 @@ void keypad_init(KeyStruct* KeyPad) {
 
 	KeyPad->index = (CODE_DIM-1);
 	KeyPad->counter = 0;
+	KeyPad->prevChar='\0';
 	keypad_flush(KeyPad);
 
 	char Array[] = CHARSET;
@@ -124,7 +125,7 @@ bool get_code(KeyStruct* KeyPad){
 
 	if(KeyPad->index >= CODE_DIM) return false;
 	if(character == NULL) return false;
-	if(character == ENTER_CHAR) return false;
+	if(*character == ENTER_CHAR) return false;
 
 	KeyPad->code[KeyPad->index] = *character;
 	KeyPad->index++;

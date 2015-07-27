@@ -42,7 +42,7 @@ main(int argc, char* argv[])
 		/******** Update State ***********/
 		isEquals = true;
 
-		if(state.eventsArray[KEYPAD]){
+		if(state.eventsArray[KEYPAD] ){
 			pin_sound();
 			int i=0;
 			HD44780_ClrScr();
@@ -138,6 +138,10 @@ main(int argc, char* argv[])
 
 		if(state.isRinging)
 			alarm_on();
+
+		if(*keypad_read(&keyPadState) == ENTER_CHAR)
+			change_pin(code, &keyPadState);
+
 
 		timer_sleep(1);
 	}

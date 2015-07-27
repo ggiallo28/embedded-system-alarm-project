@@ -42,6 +42,43 @@ alarm_init(AlarmStruct *state){
 	state -> isActive = false;
 }
 
+void change_pin(char code[], KeyStruct * keyPadState){
+	bool isEquals = true;
+	int i =0;
+
+	keypad_flush(keyPadState);
+	HD44780_ClrScr();
+	HD44780_GotoXY(0,0);
+	HD44780_PutStr("OLD PIN:");
+	HD44780_GotoXY(0,1);
+
+	while(keyPadState->index != CODE_DIM){
+		get_code(keyPadState);
+	}
+
+	while(keyPadState->code[i] != '\0' && code[i] != '\0'){
+		(isEquals & (keyPadState->code[i] == code[i])) ? (isEquals = true) : (isEquals = false);
+		i++;
+	}
+	keypad_flush(keyPadState);
+
+
+	if(!isEquals){
+		HD44780_PutStr("ERRATO");
+		return;
+	}
+
+	HD44780_ClrScr();
+	HD44780_GotoXY(0,0);
+	HD44780_PutStr("NEW PIN:");
+
+	while(keyPadState->index != CODE_DIM)
+			get_code(keyPadState);
+
+	for(i =0; i<CODE_DIM+1; i++)
+		code[i] = keyPadState->code[i];
+}
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
