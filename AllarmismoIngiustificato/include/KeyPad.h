@@ -9,8 +9,7 @@
 
 // Port numbers: 0=A, 1=B, 2=C, 3=D, 4=E, 5=F, 6=G, ...
 #define CHARSET                        {'1','2','3','4','5','6','7','8','9','*','0','#'}
-#define NO_INPUT_TIME		     	   (50)
-#define RESET_VALUE					   (-1)
+#define NO_INPUT_TIME		     	   (50)//Conta per quanto tempo non è stato premuto nessun tasto. Per non ripetere valori.
 
 #define KEYPAD_ROW_PORT_NUMBER         (2)
 #define KEYPAD_COL_PORT_NUMBER         (3)
@@ -30,20 +29,20 @@
 #define ROWS_MASK					   (120)
 #define COLS_MASK					   (7)
 
-#define PIN_DIM						   (4)
+#define CODE_DIM						   (4)
 #define CLEAR_CHAR					 ('#')
 #define ENTER_CHAR					 ('*')
 
 
 typedef struct {
 	char keys[NUM_ROWS][NUM_COLS];         /* Puntatore di puntatore, cioè una matrice. Mantiene il set di caratteri utilizzati.   */
-	char pin[PIN_DIM+1];                     /* Array PIN, serve per inserire e disinserire l'allarme                                */
+	char code[CODE_DIM+1];                     /* Array PIN, serve per inserire e disinserire l'allarme                                */
 
 	uint16_t index;                        /* Ultimo carattere valido all'interno dell'Array PIN                                   */
 
 	char prevChar;                        /* Per evitare ripetizioni del carattere in caso di pressione a lungo del tasto          */
-
 	uint16_t counter;
+
 } KeyStruct;
 
 

@@ -39,7 +39,7 @@ void keypad_init(KeyStruct* KeyPad) {
 	int i;																							/* Creazione del CHARSET */
 	int j;
 
-	KeyPad->index = (PIN_DIM-1);
+	KeyPad->index = (CODE_DIM-1);
 	KeyPad->counter = 0;
 	keypad_flush(KeyPad);
 
@@ -122,11 +122,11 @@ bool get_code(KeyStruct* KeyPad){
 		return true;
 	}
 
-	if(KeyPad->index >= PIN_DIM) return false;
+	if(KeyPad->index >= CODE_DIM) return false;
 	if(character == NULL) return false;
 	if(character == ENTER_CHAR) return false;
 
-	KeyPad->pin[KeyPad->index] = *character;
+	KeyPad->code[KeyPad->index] = *character;
 	KeyPad->index++;
 	return true;
 }
@@ -138,9 +138,9 @@ bool get_code(KeyStruct* KeyPad){
  */
 void keypad_flush(KeyStruct* KeyPad){
 	int i;
-	for(i =0; i<PIN_DIM; i++)
-		KeyPad->pin[i] = '_';
+	for(i =0; i<CODE_DIM; i++)
+		KeyPad->code[i] = '_';
 	KeyPad->index=0;
-	KeyPad->pin[PIN_DIM] = '\0';
+	KeyPad->code[CODE_DIM] = '\0';
 }
 

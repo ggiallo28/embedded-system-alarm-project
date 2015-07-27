@@ -12,7 +12,7 @@
 #include "LCD.h"
 
 #define CYCLE_DURATION 						(1)
-#define DEFAULT_CODE(_CharArray)			{int i; for(i=0; i<PIN_DIM; i++){_CharArray[i]=(i+49);} _CharArray[PIN_DIM]='\0';}
+#define DEFAULT_CODE(_CharArray)			{int i; for(i=0; i<CODE_DIM; i++){_CharArray[i]=(i+49);} _CharArray[CODE_DIM]='\0';}
 
 #define MAGN1 								(0)
 #define MAGN2 								(1)

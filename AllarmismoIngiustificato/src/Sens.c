@@ -30,9 +30,6 @@ void edge_detection_init(EdgeStruct *s){
  */
 int edge_read(EdgeStruct *s, int pin){
 	int lecture = sense_read(pin);
-	if(lecture == s->prevStates[pin]){
-		return 0;
-	}
 
 	if(s->prevStates[pin] == 0 && lecture==1){ //fronte di salita
 		s->prevStates[pin]=lecture;
@@ -55,8 +52,6 @@ magn_init(){
 			  	  	  	  	  	  	  SENSE_PIN_MASK(MAGN_TWO_PIN_NUMBER)  );
 
 	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	  GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
-	  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	  GPIO_Init(SENSE_GPIOx(SENSE_PORT_NUMBER), &GPIO_InitStructure);
 }
@@ -74,8 +69,7 @@ move_init()
 								  SENSE_PIN_MASK(MOVE_FOUR_PIN_NUMBER  	) );
 
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN; //logica affermata
   GPIO_Init(SENSE_GPIOx(SENSE_PORT_NUMBER), &GPIO_InitStructure);
 }
 

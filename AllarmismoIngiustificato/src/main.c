@@ -10,7 +10,7 @@ main(int argc, char* argv[])
 	KeyStruct keyPadState;
 	AlarmStruct state;
 	EdgeStruct sense;
-	char code[PIN_DIM+1];
+	char code[CODE_DIM+1];
 	DEFAULT_CODE(code);
 	bool isEquals;
 
@@ -43,7 +43,7 @@ main(int argc, char* argv[])
 		isEquals = true;
 
 		if(state.eventsArray[KEYPAD]){
-			pin_sound(DO_FREQ);
+			pin_sound();
 			int i=0;
 			HD44780_ClrScr();
 			HD44780_GotoXY(0,0);
@@ -51,12 +51,11 @@ main(int argc, char* argv[])
 			HD44780_GotoXY(0,1);
 			alarm_off();
 
-			while(keyPadState.pin[i] != '\0' && code[i] != '\0'){
-				HD44780_PutChar(keyPadState.pin[i]);
-				(isEquals & (keyPadState.pin[i] == code[i])) ? (isEquals = true) : (isEquals = false);
+			while(keyPadState.code[i] != '\0' && code[i] != '\0'){
+				HD44780_PutChar(keyPadState.code[i]);
+				(isEquals & (keyPadState.code[i] == code[i])) ? (isEquals = true) : (isEquals = false);
 				i++;
 			}
-
 
 			if(isEquals){
 				state.isActive = !state.isActive;
@@ -76,7 +75,7 @@ main(int argc, char* argv[])
 					HD44780_PutStr("INIBITO");
 				}
 			}
-			if(!isEquals && keyPadState.index == PIN_DIM){
+			if(!isEquals && keyPadState.index == CODE_DIM){
 				HD44780_GotoXY(0,1);
 				HD44780_PutStr("ERRATO");
 				keypad_flush(&keyPadState);

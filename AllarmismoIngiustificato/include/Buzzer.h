@@ -19,17 +19,14 @@
 #define BUZZER_TIMER_CHANNEL_INIT	TIM_OC4Init
 #define BUZZER_TIMER_CHANNEL_PRELOAD_CONFIG TIM_OC4PreloadConfig
 #define BUZZER_TIMER_CHANNEL_SET_COMPARE	TIM_SetCompare4
-
 #define BUZZER_TIMER_AF	GPIO_AF_2
-
 #define BUZZER_TIMER_RCC_BIT RCC_APB1Periph_TIM4
 
 #define BUZZER_TIMER_CLOCK_FREQUENCY 			(720000)
 #define BUZZER_DUTY_CYCLE 						(0.5)
-
 #define FREQUENCY								(1000)
-
 #define MAX_TIME								(200)
+
 #define DO_FREQ									(262)
 
 
@@ -38,7 +35,7 @@
 void buzzer_init(void);
 void alarm_on(void);
 inline void alarm_off(void);
-inline void pin_sound(int);
+inline void pin_sound(void);
 
 // ---------------------------------------------------------------------------
 
@@ -50,8 +47,8 @@ alarm_off() {
 
 inline void
 __attribute__((always_inline))
-pin_sound(int pwm_freq) {
-	BUZZER_TIMER_CHANNEL_SET_COMPARE(BUZZER_TIMER, BUZZER_TIMER_CLOCK_FREQUENCY / pwm_freq);
+pin_sound() {
+	BUZZER_TIMER_CHANNEL_SET_COMPARE(BUZZER_TIMER, BUZZER_TIMER_CLOCK_FREQUENCY / DO_FREQ);
 }
 
 #endif

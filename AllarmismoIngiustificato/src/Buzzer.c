@@ -54,7 +54,7 @@ void buzzer_init() {
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_Pulse = 0;
-	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High; //currCount < dutycicle ? (uscita=1) : (uscita=0)
 	TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Set;
 
 	TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;
