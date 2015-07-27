@@ -9,7 +9,6 @@ C_SRCS += \
 ../src/LCD.c \
 ../src/Sens.c \
 ../src/Timer.c \
-../src/_write.c \
 ../src/main.c 
 
 OBJS += \
@@ -18,7 +17,6 @@ OBJS += \
 ./src/LCD.o \
 ./src/Sens.o \
 ./src/Timer.o \
-./src/_write.o \
 ./src/main.o 
 
 C_DEPS += \
@@ -27,7 +25,6 @@ C_DEPS += \
 ./src/LCD.d \
 ./src/Sens.d \
 ./src/Timer.d \
-./src/_write.d \
 ./src/main.d 
 
 

@@ -8,7 +8,7 @@
 void lcd_init(){
 	HD44780_Init();
 	pwm_init();
-	HD44780_set_contrast(20);
+	HD44780_set_contrast(15);
 }
 
 void HD44780_Init(void){
@@ -53,11 +53,11 @@ void HD44780_Init(void){
 	hd44780_RW_Off();																	/* Selects read or write. 0:  Write 1:  Read 																		*/
 
 	hd44780_init_delay(); 														 		/* Funzioni per l'inizializzazione del lcd, bisogna attendere un certo tempo affinchè il comando venga eseguito 	*/
-	hd44780_wr_hi_nibble( HD44780_CMD_RESET );
+	hd44780_wr_cmd( HD44780_CMD_RESET );
 	hd44780_init_delay2();
-	hd44780_wr_hi_nibble( HD44780_CMD_RESET );
+	hd44780_wr_cmd( HD44780_CMD_RESET );
 	hd44780_init_delay3();
-	hd44780_wr_hi_nibble( HD44780_CMD_RESET );
+	hd44780_wr_cmd( HD44780_CMD_RESET );
 
 	hd44780_function( HD44780_CONF_BUS, HD44780_CONF_LINES, HD44780_CONF_FONT );        /* Si settano i Parametri di configurazione 																		*/
 
@@ -269,8 +269,6 @@ void HD44780_GotoXY(unsigned char x, unsigned char y){
 	{
 	case 0:  copy_y = 0x80; break;
 	case 1:  copy_y = 0xc0; break;
-	case 2:  copy_y = 0x94; break;
-	case 3:  copy_y = 0xd4; break;
 	}
 	hd44780_wr_cmd(x + copy_y);
 }
@@ -284,41 +282,6 @@ void HD44780_ClrScr(void)
 	hd44780_wr_cmd(HD44780_CMD_CLEAR);
 	timer_sleep(1);
 }
-/*********************************************************************************************
- *@Param:		- char
- *@return:      - void
- *Descrizione	: Funzione usata solo un fase di inizializzazione per resettare il display.
- *********************************************************************************************/
-void hd44780_wr_hi_nibble( unsigned char data )
-{
-	if ( data & 0x10 ) {
-		GPIO_SetBits( LCD_GPIOx(HD44780_DATAPORT), LCD_PIN_MASK(HD44780_DATABIT4));
-	} else {
-		GPIO_ResetBits( LCD_GPIOx(HD44780_DATAPORT), LCD_PIN_MASK(HD44780_DATABIT4));
-	}
-	if ( data & 0x20 ) {
-		GPIO_SetBits( LCD_GPIOx(HD44780_DATAPORT), LCD_PIN_MASK(HD44780_DATABIT5) );
-	} else {
-		GPIO_ResetBits( LCD_GPIOx(HD44780_DATAPORT), LCD_PIN_MASK(HD44780_DATABIT5) );
-	}
-	if ( data & 0x40 ) {
-		GPIO_SetBits( LCD_GPIOx(HD44780_DATAPORT), LCD_PIN_MASK(HD44780_DATABIT6) );
-	} else {
-		GPIO_ResetBits( LCD_GPIOx(HD44780_DATAPORT), LCD_PIN_MASK(HD44780_DATABIT6) );
-	}
-	if ( data & 0x80 ) {
-		GPIO_SetBits( LCD_GPIOx(HD44780_DATAPORT), LCD_PIN_MASK(HD44780_DATABIT7) );
-	} else {
-		GPIO_ResetBits( LCD_GPIOx(HD44780_DATAPORT), LCD_PIN_MASK(HD44780_DATABIT7 ));
-	}
-
-	hd44780_EN_On();
-
-	hd44780_EN_high_delay();
-
-	hd44780_EN_Off();
-}
-
 
 
 

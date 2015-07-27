@@ -1,16 +1,8 @@
-#ifndef MAGN_H_
-#define  MAGN_H_
+#ifndef SENS_H_
+#define  SENS_H_
 
 #include "stm32f30x.h"
 #include <stdbool.h>
-
-
-// ----- LED definitions ------------------------------------------------------
-
-// Adjust these definitions for your own board.
-
-// STM32F3DISCOVERY definitions (GREEN led, E15, active high)
-// (SEGGER J-Link device name: STM32F303VC).
 
 // Port numbers: 0=A, 1=B, 2=C, 3=D, 4=E, 5=F, 6=G, ...
 #define SENSE_PORT_NUMBER              	   (2)
@@ -88,4 +80,4 @@ move_four_read(EdgeStruct* s)
 
 // ----------------------------------------------------------------------------
 
-#endif // MAGNLED_H_
+#endif

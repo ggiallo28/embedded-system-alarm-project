@@ -39,8 +39,9 @@ void keypad_init(KeyStruct* KeyPad) {
 	int i;																							/* Creazione del CHARSET */
 	int j;
 
-	KeyPad->index = (PIN_DIM-1);
+	KeyPad->index = (CODE_DIM-1);
 	KeyPad->counter = 0;
+	KeyPad->prevChar='\0';
 	keypad_flush(KeyPad);
 
 	char Array[] = CHARSET;
@@ -95,10 +96,12 @@ char* keypad_read(KeyStruct* KeyPad) {
 			GPIO_ResetBits(KEYPAD_GPIOx(KEYPAD_ROW_PORT_NUMBER),KEYPAD_PIN_MASK(row_pin_number));
 			currChar = KeyPad->keys[row_pin_number][col];
 
-			if(currChar != KeyPad->prevChar || KeyPad->counter>NO_INPUT_TIME){              /* Logica necessaria affinche' non venga riprodotto in uscita più volte lo stesso valore         */
+			if(currChar != KeyPad->prevChar || KeyPad->counter>NO_INPUT_TIME){
+																							/* Logica necessaria affinche' non venga riprodotto in uscita più volte lo stesso valore         */
 				KeyPad->prevChar = currChar;												/* nel caso in cui il tasto venga premuto a lungo. Per non escludere la possibilità di           */
 				KeyPad->counter = 0;														/* poter inserire valori consecutivamente uguali all'interno del PIN è presente anche un counter */
-				return &(KeyPad->prevChar);													/* che controlla quanto tempo è trascorso dall'ultima pressione                                  */
+				return &(KeyPad->prevChar);													/* che controlla quanto tempo è trascorso dall'ultima pressione. if(currChar != ENTER_CHAR) è    */
+																							/* necessario per fare in modo da non aggioranare il prevChar se premiamo *.*/
 			}
 
 			KeyPad->counter = 0;
@@ -122,11 +125,11 @@ bool get_code(KeyStruct* KeyPad){
 		return true;
 	}
 
-	if(KeyPad->index >= PIN_DIM) return false;
+	if(KeyPad->index >= CODE_DIM) return false;
 	if(character == NULL) return false;
-	if(character == ENTER_CHAR) return false;
+	if(*character == ENTER_CHAR) return false;
 
-	KeyPad->pin[KeyPad->index] = *character;
+	KeyPad->code[KeyPad->index] = *character;
 	KeyPad->index++;
 	return true;
 }
@@ -138,9 +141,9 @@ bool get_code(KeyStruct* KeyPad){
  */
 void keypad_flush(KeyStruct* KeyPad){
 	int i;
-	for(i =0; i<PIN_DIM; i++)
-		KeyPad->pin[i] = '_';
+	for(i =0; i<CODE_DIM; i++)
+		KeyPad->code[i] = '_';
 	KeyPad->index=0;
-	KeyPad->pin[PIN_DIM] = '\0';
+	KeyPad->code[CODE_DIM] = '\0';
 }
 

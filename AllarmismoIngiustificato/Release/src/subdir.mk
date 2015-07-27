@@ -5,29 +5,26 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../src/Buzzer.c \
-../src/HD44780_F3.c \
 ../src/KeyPad.c \
+../src/LCD.c \
 ../src/Sens.c \
 ../src/Timer.c \
-../src/_write.c \
 ../src/main.c 
 
 OBJS += \
 ./src/Buzzer.o \
-./src/HD44780_F3.o \
 ./src/KeyPad.o \
+./src/LCD.o \
 ./src/Sens.o \
 ./src/Timer.o \
-./src/_write.o \
 ./src/main.o 
 
 C_DEPS += \
 ./src/Buzzer.d \
-./src/HD44780_F3.d \
 ./src/KeyPad.d \
+./src/LCD.d \
 ./src/Sens.d \
 ./src/Timer.d \
-./src/_write.d \
 ./src/main.d 
 
 

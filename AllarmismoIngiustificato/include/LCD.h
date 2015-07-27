@@ -21,8 +21,8 @@ Functions				: HD44780_Init
 Special Note(s) : NONE
 ##############################################################*/
 
-#ifndef HD44780_F3_H
-#define HD44780_F3_H
+#ifndef LCD_H_
+#define LCD_H_
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -93,16 +93,15 @@ Special Note(s) : NONE
 
 #define HD44780_DISP_LENGTH						    (16)
 #define HD44780_DISP_ROWS							(2)
-#define HD44780_CONF_SCROLL_MS				        (20)
 
 // Port numbers: 0=A, 1=B, 2=C, 3=D, 4=E, 5=F, 6=G, ...
 
 /* HD44780 Data lines - use the same port for all the lines */
 #define HD44780_DATAPORT							(0)
-#define HD44780_DATABIT0							(0)	//not used in 4-bit mode
-#define HD44780_DATABIT1							(1)	//not used in 4-bit mode
-#define HD44780_DATABIT2							(2)	//not used in 4-bit mode
-#define HD44780_DATABIT3							(3)	//not used in 4-bit mode
+#define HD44780_DATABIT0							(0)
+#define HD44780_DATABIT1							(1)
+#define HD44780_DATABIT2							(2)
+#define HD44780_DATABIT3							(3)
 #define HD44780_DATABIT4							(4)
 #define HD44780_DATABIT5							(5)
 #define HD44780_DATABIT6							(6)
@@ -144,15 +143,15 @@ Special Note(s) : NONE
 #define TIMER_RCC_BIT RCC_APB2Periph_TIM1
 
 #define TIMER_CLOCK_FREQUENCY 1000
-#define TIMER_PERIOD 75
+#define TIMER_PERIOD 100
 /***************************************************************
  *
  * FUNCTIONS
  *
  ***************************************************************/
 
-#define hd44780_RS_On()		            GPIO_SetBits(LCD_GPIOx(HD44780_CONTROLPORT), LCD_PIN_MASK(HD44780_RS_BIT))
-#define hd44780_RS_Off()	           	GPIO_ResetBits(LCD_GPIOx(HD44780_CONTROLPORT), LCD_PIN_MASK(HD44780_RS_BIT))
+#define hd44780_RS_On()		            GPIO_SetBits(LCD_GPIOx(HD44780_CONTROLPORT), LCD_PIN_MASK(HD44780_RS_BIT))    // Dati
+#define hd44780_RS_Off()	           	GPIO_ResetBits(LCD_GPIOx(HD44780_CONTROLPORT), LCD_PIN_MASK(HD44780_RS_BIT))  // Controllo
 #define hd44780_RW_On()		            GPIO_SetBits(LCD_GPIOx(HD44780_CONTROLPORT), LCD_PIN_MASK(HD44780_RW_BIT))
 #define hd44780_RW_Off()	            GPIO_ResetBits(LCD_GPIOx(HD44780_CONTROLPORT), LCD_PIN_MASK(HD44780_RW_BIT))
 #define hd44780_EN_On()		            GPIO_SetBits(LCD_GPIOx(HD44780_CONTROLPORT), LCD_PIN_MASK(HD44780_EN_BIT))
@@ -165,16 +164,10 @@ Special Note(s) : NONE
 #define hd44780_init_end_delay()    	timer_sleep(2)
 
 #define hd44780_clear()                       	  hd44780_wr_cmd( HD44780_CMD_CLEAR )
-#define hd44780_home()                        	  hd44780_wr_cmd( HD44780_CMD_RETURN_HOME )
 #define hd44780_entry( inc_dec, shift )           hd44780_wr_cmd( ( HD44780_CMD_ENTRY_MODE | inc_dec | shift ) & 0x07 )
 #define hd44780_display( on_off, cursor, blink )  hd44780_wr_cmd( ( HD44780_CMD_DISPLAY | on_off | cursor | blink ) & 0x0F )
-#define hd44780_shift( inc_dec, shift )           hd44780_wr_cmd( ( HD44780_CMD_SHIFT | inc_dec | shift ) & 0x1F )
 #define hd44780_function( bus, lines, font )      hd44780_wr_cmd( ( HD44780_CMD_FUNCTION | bus | lines | font ) & 0x3F )
-#define hd44780_cgram_addr( addr )                hd44780_wr_cmd( HD44780_CMD_CGRAM_ADDR | ( addr & 0x3F ) )
-#define hd44780_ddram_addr( addr )                hd44780_wr_cmd( HD44780_CMD_DDRAM_ADDR | ( addr & 0x7F ) )
-#define hd44780_write_char( c )                   hd44780_wr_data( c & 0xff )
 
-void hd44780_wr_hi_nibble(unsigned char data);
 void hd44780_write(unsigned char data);
 void hd44780_wr_cmd(unsigned char cmd);
 void hd44780_wr_data(unsigned char data);
