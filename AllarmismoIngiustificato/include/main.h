@@ -43,8 +43,8 @@ alarm_init(AlarmStruct *state){
 }
 
 void change_pin(char code[], KeyStruct * keyPadState){
+	pin_sound();
 	bool isEquals = true;
-	int i =0;
 
 	keypad_flush(keyPadState);
 	HD44780_ClrScr();
@@ -52,31 +52,84 @@ void change_pin(char code[], KeyStruct * keyPadState){
 	HD44780_PutStr("OLD PIN:");
 	HD44780_GotoXY(0,1);
 
+	alarm_off();
+
+	int i =0;
 	while(keyPadState->index != CODE_DIM){
-		get_code(keyPadState);
+		if(get_code(keyPadState)){
+			pin_sound();
+			HD44780_GotoXY(0,1);
+			while(i<CODE_DIM){
+				HD44780_PutChar(keyPadState->code[i]);
+				i++;
+			}
+			timer_sleep(2);
+			alarm_off();
+			i=0;
+		}
 	}
 
+	i=0;
 	while(keyPadState->code[i] != '\0' && code[i] != '\0'){
 		(isEquals & (keyPadState->code[i] == code[i])) ? (isEquals = true) : (isEquals = false);
 		i++;
 	}
 	keypad_flush(keyPadState);
 
-
 	if(!isEquals){
 		HD44780_PutStr("ERRATO");
 		return;
 	}
+	bool confirm = false;
+
+	while(!confirm){
+		HD44780_ClrScr();
+		HD44780_GotoXY(0,0);
+		HD44780_PutStr("NEW PIN:");
+		i=0;
+		while(keyPadState->index != CODE_DIM){
+			if(get_code(keyPadState)){
+				pin_sound();
+				HD44780_GotoXY(0,1);
+				while(i<CODE_DIM){
+					HD44780_PutChar(keyPadState->code[i]);
+					i++;
+				}
+				timer_sleep(2);
+				alarm_off();
+				i=0;
+			}
+		}
+		HD44780_GotoXY(0,0);
+		HD44780_PutStr("CONFIRM?");
+		HD44780_GotoXY(0,1);
+		HD44780_PutStr("Y=* N=#");
+
+
+		keypad_read(keyPadState);
+		while(keyPadState->prevChar != ENTER_CHAR && keyPadState->prevChar != CLEAR_CHAR ){
+			keypad_read(keyPadState);
+		}
+		if(keyPadState->prevChar== ENTER_CHAR){
+			confirm=true;
+			for(i =0; i<CODE_DIM+1; i++)
+				code[i] = keyPadState->code[i];
+		}
+		else if(keyPadState->prevChar == CLEAR_CHAR)
+			confirm=false;
+		keypad_flush(keyPadState);
+		keyPadState->prevChar = '\0';
+	}
 
 	HD44780_ClrScr();
-	HD44780_GotoXY(0,0);
-	HD44780_PutStr("NEW PIN:");
+	HD44780_GotoXY(1,0);
+	HD44780_PutStr("WAIT..");
+	timer_sleep(1000);
+	while(keyPadState->prevChar == ENTER_CHAR)
+		keyPadState->prevChar = '\0';
 
-	while(keyPadState->index != CODE_DIM)
-			get_code(keyPadState);
-
-	for(i =0; i<CODE_DIM+1; i++)
-		code[i] = keyPadState->code[i];
+	HD44780_GotoXY(0,1);
+	HD44780_PutStr("INSERITO");
 }
 
 #pragma GCC diagnostic push

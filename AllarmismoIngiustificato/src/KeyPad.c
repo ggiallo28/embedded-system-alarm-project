@@ -96,10 +96,12 @@ char* keypad_read(KeyStruct* KeyPad) {
 			GPIO_ResetBits(KEYPAD_GPIOx(KEYPAD_ROW_PORT_NUMBER),KEYPAD_PIN_MASK(row_pin_number));
 			currChar = KeyPad->keys[row_pin_number][col];
 
-			if(currChar != KeyPad->prevChar || KeyPad->counter>NO_INPUT_TIME){              /* Logica necessaria affinche' non venga riprodotto in uscita più volte lo stesso valore         */
+			if(currChar != KeyPad->prevChar || KeyPad->counter>NO_INPUT_TIME){
+																							/* Logica necessaria affinche' non venga riprodotto in uscita più volte lo stesso valore         */
 				KeyPad->prevChar = currChar;												/* nel caso in cui il tasto venga premuto a lungo. Per non escludere la possibilità di           */
 				KeyPad->counter = 0;														/* poter inserire valori consecutivamente uguali all'interno del PIN è presente anche un counter */
-				return &(KeyPad->prevChar);													/* che controlla quanto tempo è trascorso dall'ultima pressione                                  */
+				return &(KeyPad->prevChar);													/* che controlla quanto tempo è trascorso dall'ultima pressione. if(currChar != ENTER_CHAR) è    */
+																							/* necessario per fare in modo da non aggioranare il prevChar se premiamo *.*/
 			}
 
 			KeyPad->counter = 0;
