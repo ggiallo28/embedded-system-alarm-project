@@ -38,7 +38,7 @@ void buzzer_init() {
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
 	uint32_t prescaler = RCC_Clocks.PCLK2_Frequency / BUZZER_TIMER_CLOCK_FREQUENCY - 1;
-	uint32_t period = BUZZER_TIMER_CLOCK_FREQUENCY / 262;
+	uint32_t period = BUZZER_TIMER_CLOCK_FREQUENCY 	/ DO_FREQ;
 	TIM_TimeBaseStructure.TIM_Period = period - 1;
 	TIM_TimeBaseStructure.TIM_Prescaler = prescaler;
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
@@ -77,7 +77,7 @@ alarm_on(){
 	if((time = (time+1)%MAX_TIME)  == 0)
 		index = (index+1)%2;
 
-	pwm_freq = (index+1)*FREQUENCY;
+	pwm_freq=(index+1)*FREQUENCY;
 
 
 	RCC_ClocksTypeDef RCC_Clocks;
@@ -95,6 +95,7 @@ alarm_on(){
 
 	BUZZER_TIMER_CHANNEL_SET_COMPARE(BUZZER_TIMER, period * BUZZER_DUTY_CYCLE);
 }
+
 
 // ----------------------------------------------------------------------------
 

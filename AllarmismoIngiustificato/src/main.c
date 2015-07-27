@@ -43,11 +43,13 @@ main(int argc, char* argv[])
 		isEquals = true;
 
 		if(state.eventsArray[KEYPAD]){
+		pin_sound(DO_FREQ);
 		int i=0;
 		HD44780_ClrScr();
 		HD44780_GotoXY(0,0);
 		HD44780_PutStr("PIN:");
 		HD44780_GotoXY(0,1);
+		alarm_off();
 
 		while(keyPadState.pin[i] != '\0' && code[i] != '\0'){
 			HD44780_PutChar(keyPadState.pin[i]);
@@ -137,6 +139,8 @@ main(int argc, char* argv[])
 
 		 if(state.isRinging)
 			 alarm_on();
+
+		 timer_sleep(1);
 	 }
 }
 

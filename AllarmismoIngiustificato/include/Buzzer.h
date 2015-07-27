@@ -30,6 +30,7 @@
 #define FREQUENCY								(1000)
 
 #define MAX_TIME								(200)
+#define DO_FREQ									(262)
 
 
 // ----------------------------------------------------------------------------
@@ -37,13 +38,20 @@
 void buzzer_init(void);
 void alarm_on(void);
 inline void alarm_off(void);
+inline void pin_sound(int);
 
-// ----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 inline void
 __attribute__((always_inline))
 alarm_off() {
 	BUZZER_TIMER_CHANNEL_SET_COMPARE(BUZZER_TIMER, 0);
+}
+
+inline void
+__attribute__((always_inline))
+pin_sound(int pwm_freq) {
+	BUZZER_TIMER_CHANNEL_SET_COMPARE(BUZZER_TIMER, BUZZER_TIMER_CLOCK_FREQUENCY / pwm_freq);
 }
 
 #endif

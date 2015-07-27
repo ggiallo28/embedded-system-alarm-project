@@ -1,5 +1,5 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef MAIN_H_
+#define MAIN_H_
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -30,6 +30,7 @@ typedef struct {
 	bool eventsArray[NUMBER_OF_SENSE+1];
 	bool isActive;
 	bool isRinging;
+	int pwm_freq;
 }AlarmStruct;
 
 void

@@ -1,5 +1,5 @@
-#ifndef MAGN_H_
-#define  MAGN_H_
+#ifndef SENS_H_
+#define  SENS_H_
 
 #include "stm32f30x.h"
 #include <stdbool.h>
@@ -80,4 +80,4 @@ move_four_read(EdgeStruct* s)
 
 // ----------------------------------------------------------------------------
 
-#endif // MAGNLED_H_
+#endif

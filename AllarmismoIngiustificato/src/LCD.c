@@ -8,7 +8,7 @@
 void lcd_init(){
 	HD44780_Init();
 	pwm_init();
-	HD44780_set_contrast(20);
+	HD44780_set_contrast(15);
 }
 
 void HD44780_Init(void){

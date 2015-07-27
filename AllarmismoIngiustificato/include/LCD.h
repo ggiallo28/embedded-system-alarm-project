@@ -21,8 +21,8 @@ Functions				: HD44780_Init
 Special Note(s) : NONE
 ##############################################################*/
 
-#ifndef HD44780_F3_H
-#define HD44780_F3_H
+#ifndef LCD_H_
+#define LCD_H_
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -144,7 +144,7 @@ Special Note(s) : NONE
 #define TIMER_RCC_BIT RCC_APB2Periph_TIM1
 
 #define TIMER_CLOCK_FREQUENCY 1000
-#define TIMER_PERIOD 75
+#define TIMER_PERIOD 100
 /***************************************************************
  *
  * FUNCTIONS
