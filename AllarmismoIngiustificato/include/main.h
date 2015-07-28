@@ -54,7 +54,7 @@ void change_pin(char code[], KeyStruct * keyPadState){
 	keypad_flush(keyPadState);
 	HD44780_ClrScr();
 	HD44780_GotoXY(0,0);
-	HD44780_PutStr("OLD PIN:");
+	HD44780_PutStr("VECCHIO PIN:");
 	HD44780_GotoXY(0,1);
 
 	alarm_off();
@@ -91,7 +91,7 @@ void change_pin(char code[], KeyStruct * keyPadState){
 	while(!confirm){
 		HD44780_ClrScr();
 		HD44780_GotoXY(0,0);
-		HD44780_PutStr("NEW PIN:");
+		HD44780_PutStr("NUOVO PIN:");
 		i=0;
 		while(keyPadState->index != CODE_DIM){
 			if(get_code(keyPadState)){
@@ -107,9 +107,9 @@ void change_pin(char code[], KeyStruct * keyPadState){
 			}
 		}
 		HD44780_GotoXY(0,0);
-		HD44780_PutStr("CONFIRM?");
+		HD44780_PutStr("CONFERMI IL PIN?");
 		HD44780_GotoXY(0,1);
-		HD44780_PutStr("Y=* N=#");
+		HD44780_PutStr("SI = * NO = #");
 
 
 		keypad_read(keyPadState);
@@ -128,13 +128,13 @@ void change_pin(char code[], KeyStruct * keyPadState){
 	}
 
 	HD44780_ClrScr();
-	HD44780_GotoXY(1,0);
-	HD44780_PutStr("WAIT..");
+	HD44780_GotoXY(2,0);
+	HD44780_PutStr("ATTENDERE...");
 	timer_sleep(1000);
 	while(keyPadState->prevChar == ENTER_CHAR)
 		keyPadState->prevChar = '\0';
 
-	HD44780_GotoXY(0,1);
+	HD44780_GotoXY(2,1);
 	HD44780_PutStr("INSERITO");
 }
 

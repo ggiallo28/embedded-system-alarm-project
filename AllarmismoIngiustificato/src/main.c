@@ -5,8 +5,6 @@
 int
 main(int argc, char* argv[])
 {
-	trace_puts("Hello ARM World!");
-	trace_printf("System clock: %uHz\n", SystemCoreClock);
 
 	/************** VARIABLE DECLARATION */
 	KeyStruct keyPadState;
@@ -27,9 +25,9 @@ main(int argc, char* argv[])
 	/************** INFINITE LOOP *****/
 	HD44780_ClrScr();
 	HD44780_GotoXY(0,0);
-	HD44780_PutStr("SALVE PF");
+	HD44780_PutStr("SALVE PRF FOGGIA");
 	HD44780_GotoXY(0,1);
-	HD44780_PutStr("FOGGIA");
+	HD44780_PutStr("Alarm System 1.0");
 	keypad_flush(&keyPadState);
 
 	while(1){
@@ -68,13 +66,13 @@ main(int argc, char* argv[])
 					HD44780_GotoXY(0,0);
 					HD44780_PutStr("ALLARME");
 					HD44780_GotoXY(0,1);
-					HD44780_PutStr("INSERITO");
+					HD44780_PutStr("ATTIVATO");
 				}else{
 					HD44780_ClrScr();
 					HD44780_GotoXY(0,0);
 					HD44780_PutStr("ALLARME");
 					HD44780_GotoXY(0,1);
-					HD44780_PutStr("INIBITO");
+					HD44780_PutStr("DISATTIVATO");
 				}
 			}
 			if(!isEquals && keyPadState.index == CODE_DIM){
@@ -88,7 +86,7 @@ main(int argc, char* argv[])
 			state.isRinging = true;
 			HD44780_ClrScr();
 			HD44780_GotoXY(0,0);
-			HD44780_PutStr("EVENTO");
+			HD44780_PutStr("VIOLAZIONE");
 			HD44780_GotoXY(0,1);
 			HD44780_PutStr("PORTA 1");
 		}
@@ -96,7 +94,7 @@ main(int argc, char* argv[])
 			state.isRinging = true;
 			HD44780_ClrScr();
 			HD44780_GotoXY(0,0);
-			HD44780_PutStr("EVENTO");
+			HD44780_PutStr("VIOLAZIONE");
 			HD44780_GotoXY(0,1);
 			HD44780_PutStr("PORTA 2");
 		}
@@ -104,7 +102,7 @@ main(int argc, char* argv[])
 			state.isRinging = true;
 			HD44780_ClrScr();
 			HD44780_GotoXY(0,0);
-			HD44780_PutStr("EVENTO");
+			HD44780_PutStr("VIOLAZIONE");
 			HD44780_GotoXY(0,1);
 			HD44780_PutStr("STANZA 1");
 		}
@@ -112,7 +110,7 @@ main(int argc, char* argv[])
 			state.isRinging = true;
 			HD44780_ClrScr();
 			HD44780_GotoXY(0,0);
-			HD44780_PutStr("EVENTO");
+			HD44780_PutStr("VIOLAZIONE");
 			HD44780_GotoXY(0,1);
 			HD44780_PutStr("STANZA 2");
 		}
@@ -120,7 +118,7 @@ main(int argc, char* argv[])
 			state.isRinging = true;
 			HD44780_ClrScr();
 			HD44780_GotoXY(0,0);
-			HD44780_PutStr("EVENTO");
+			HD44780_PutStr("VIOLAZIONE");
 			HD44780_GotoXY(0,1);
 			HD44780_PutStr("STANZA 3");
 		}
@@ -128,7 +126,7 @@ main(int argc, char* argv[])
 			state.isRinging = true;
 			HD44780_ClrScr();
 			HD44780_GotoXY(0,0);
-			HD44780_PutStr("EVENTO");
+			HD44780_PutStr("VIOLAZIONE");
 			HD44780_GotoXY(0,1);
 			HD44780_PutStr("STANZA 4");
 		}
