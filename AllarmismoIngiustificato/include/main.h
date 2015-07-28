@@ -82,8 +82,8 @@ void change_pin(char code[], KeyStruct * keyPadState){
 	keypad_flush(keyPadState);
 
 	if(!isEquals){
+		HD44780_GotoXY(0,1);
 		HD44780_PutStr("ERRATO");
-		keyPadState->prevChar = '\0';
 		return;
 	}
 	bool confirm = false;

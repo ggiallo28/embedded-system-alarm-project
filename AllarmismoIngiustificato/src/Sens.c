@@ -52,7 +52,7 @@ magn_init(){
 			  	  	  	  	  	  	  SENSE_PIN_MASK(MAGN_TWO_PIN_NUMBER)  );
 
 	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+	  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //logica negata
 	  GPIO_Init(SENSE_GPIOx(SENSE_PORT_NUMBER), &GPIO_InitStructure);
 }
 

@@ -30,6 +30,8 @@ typedef struct{
 extern
 void
 sense_init(EdgeStruct*);
+void move_init();
+void magn_init();
 
 int sense_read(int);
 
