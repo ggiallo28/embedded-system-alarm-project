@@ -30,7 +30,6 @@ typedef struct {
 	bool eventsArray[NUMBER_OF_SENSE+1];
 	bool isActive;
 	bool isRinging;
-	int pwm_freq;
 }AlarmStruct;
 
 void
@@ -86,8 +85,12 @@ void change_pin(char code[], KeyStruct * keyPadState){
 		HD44780_PutStr("ERRATO");
 		return;
 	}
+
 	bool confirm = false;
 
+	/*
+	 * Attesa attiva.
+	 */
 	while(!confirm){
 		HD44780_ClrScr();
 		HD44780_GotoXY(0,0);
